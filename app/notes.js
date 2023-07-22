@@ -73,8 +73,32 @@ Notes.prototype.clearActive = function () {
   }
 };
 
+//(G-G)Twinkle, (D-D)twinkle, (E-E)little (D)star,(C)How (C)I (B-B)wonder (A)what (A)you (G)are!
+const expectedNotes = ["G", "G", "D", "D", "E", "E", "D", "C", "C", "B", "B", "A", "A", "G"]
+//const expectedNotes = ["G", "D", "E", "D", "C", "B", "A", "G"]
+let expectedNoteIndex = 0
+let lastNote = "X"
+let count = 0
+
 Notes.prototype.update = function (note) {
   if (note.value in this.$notesMap) {
+    noteString = this.$notesMap[note.value].dataset.name;
+  } else {
+    noteString = "X";
+  }
+
+  if (noteString == lastNote) {
+    count++;
+  } else {
+    lastNote = noteString;
+    count = 1;
+  }
+  if (count == 5 && noteString != "X") {
+    console.log("Current Note:" + noteString + "   Golden:" + expectedNotes[expectedNoteIndex]);
+    expectedNoteIndex++;
+  }
+
+  if (noteString != "X") {
     this.active(this.$notesMap[note.value]);
     this.$frequency.childNodes[0].textContent = parseFloat(
       note.frequency
@@ -86,6 +110,9 @@ Notes.prototype.toggleAutoMode = function () {
   if (!this.isAutoMode) {
     this.tuner.stopOscillator();
   }
+  count = 0
+  expectedNoteIndex = 0
+  lastNote = "X"
   this.clearActive();
   this.isAutoMode = !this.isAutoMode;
 };

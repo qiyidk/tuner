@@ -1,7 +1,8 @@
 const Tuner = function (a4) {
   this.middleA = a4 || 440;
   this.semitone = 69;
-  this.bufferSize = 4096;
+  //this.bufferSize = 4096;
+  this.bufferSize = 1024;
   this.noteStrings = [
     "C",
     "C♯",
@@ -19,7 +20,6 @@ const Tuner = function (a4) {
 
   this.initGetUserMedia();
 };
-
 Tuner.prototype.initGetUserMedia = function () {
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!window.AudioContext) {
@@ -66,8 +66,8 @@ Tuner.prototype.startRecord = function () {
         const frequency = self.pitchDetector.do(
           event.inputBuffer.getChannelData(0)
         );
-        if (frequency && self.onNoteDetected) {
-          const note = self.getNote(frequency);
+        if (/*frequency && */self.onNoteDetected) {
+          note = self.getNote(frequency);
           self.onNoteDetected({
             name: self.noteStrings[note % 12],
             value: note,
